@@ -12,7 +12,7 @@ app.use(express.json());
 
 //these are the parameters that need to be passed to the watsonxAIService.generateText() function. 
 const params = {
-  input: 'How far is Paris from Bangalore?',
+  input: 'Are hurricanes dangerous?',
   modelId: 'ibm/granite-13b-chat-v2',
   projectId: '0babe918-b3ea-44b1-8c68-ac854b4f160e',
   parameters: {
