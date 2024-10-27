@@ -11,6 +11,7 @@ const GamePage = () => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState({});
 
+
   // Fetch the first message from the server when the page loads
   useEffect(() => {
     axios.get('http://localhost:5000/api/history')
