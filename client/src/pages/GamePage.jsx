@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import '../index.css';
-import Header from '../components/Header';
+import Logo from '../components/Logo';
 import Footer from '../components/Footer';
+import SlidingMenu from '../components/SlidingMenu';
 
 const GamePage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  // first message from the server when the page loads
+  // Fetch the first message from the server when the page loads
   useEffect(() => {
     axios.get('http://localhost:5000/api/message')
       .then(response => {
@@ -40,16 +41,16 @@ const GamePage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-800 text-white">
-		<Header />
-
+    <div className="h-screen flex flex-col bg-[#222831] text-[#EEEEEE]">
+      <Logo />
+      <SlidingMenu />
 
       {/* Chatbox container */}
       <div className="flex-grow overflow-y-auto p-4">
         {messages.map((msg, index) => (
           <motion.div
             key={index}
-            className={`mb-4 p-3 max-w-xs ${msg.sender === 'User' ? 'bg-blue-500 self-end' : 'bg-gray-700 self-start'} rounded-lg`}
+            className={`mb-4 p-3 max-w-xs ${msg.sender === 'User' ? 'bg-[#76ABAE] self-end' : 'bg-[#31363F] self-start'} rounded-lg shadow-md`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
@@ -60,23 +61,25 @@ const GamePage = () => {
       </div>
 
       {/* Input area */}
-      <div className="flex items-center p-4 bg-gray-900">
+      <div className="flex items-center p-4 bg-[#31363F]">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
           placeholder="Type your message..."
-          className="flex-grow bg-gray-700 text-white rounded-lg p-3 mr-3 outline-none"
+          className="flex-grow bg-[#3D434A] text-white rounded-lg p-3 mr-3 outline-none"
         />
         <motion.button
           onClick={sendMessage}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold"
+          className="bg-[#76ABAE] hover:bg-[#76ABAE]/80 px-6 py-3 rounded-lg font-semibold"
           whileHover={{ scale: 1.1 }}
         >
           Send
         </motion.button>
       </div>
+
+      <Footer />
     </div>
   );
 };
