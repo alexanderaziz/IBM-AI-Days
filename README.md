@@ -1,4 +1,4 @@
-# 🌧️ Rainfall Preparation Game  
+# 🌧️ Rainfall Preparation Genie
 **An Educational Text-Based RPG to Teach Disaster Preparedness**  
 
 This project is a text-based RPG game built with IBM’s AI cloud services. It aims to help players learn how to prepare for natural disasters and make safer decisions during emergencies, especially heavy rainfall and flooding. The game provides a fun and interactive way to understand disaster management through dynamic scenarios where every choice matters!
