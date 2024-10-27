@@ -18,9 +18,9 @@ const LandingPage = () => {
   const pauseTime = 20000; // Pause time after completing a text
   const texts = [
     "that prepares you for hurricanes.",
-    "that teaches safety through play.",
+    "that teaches safety precautions.",
     "where your choices matter.",
-    "that transforms learning into adventure.",
+    "that conveys critical information.",
     "designed for real-life hurricane scenarios.",
     "that turns preparation into a quest."
   ]; 
@@ -104,7 +104,7 @@ const LandingPage = () => {
               filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
             }}
           >
-            Rainfall Preparation Generative
+            Rainfall Preparation Game
           </motion.h1>
 
 
