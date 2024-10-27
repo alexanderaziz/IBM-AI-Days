@@ -8,14 +8,22 @@ import Footer from '../components/Footer';
 const GamePage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [history, setHistory] = useState({});
+
 
   // first message from the server when the page loads
   useEffect(() => {
+    // This should probably get deleted. The call to the AI is post api/prompt 
     axios.get('http://localhost:5000/api/message')
       .then(response => {
         setMessages([{ text: response.data.message, sender: 'LLM' }]);
       })
       .catch(error => console.error('Error fetching message:', error));
+    axios.get('http://localhost:5000/api/history')
+    .then(response => {
+      console.log(response.data.history);
+    })
+    .catch(error => console.error('Error fetching history:', error));
   }, []);
 
   // Handle sending messages
