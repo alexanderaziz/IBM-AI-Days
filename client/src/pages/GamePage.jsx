@@ -9,14 +9,15 @@ import SlidingMenu from '../components/SlidingMenu';
 const GamePage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [history, setHistory] = useState({});
 
   // Fetch the first message from the server when the page loads
   useEffect(() => {
-    axios.get('http://localhost:5000/api/message')
-      .then(response => {
-        setMessages([{ text: response.data.message, sender: 'LLM' }]);
-      })
-      .catch(error => console.error('Error fetching message:', error));
+    axios.get('http://localhost:5000/api/history')
+    .then(response => {
+      console.log(response.data.history);
+    })
+    .catch(error => console.error('Error fetching history:', error));
   }, []);
 
   // Handle sending messages
@@ -30,12 +31,13 @@ const GamePage = () => {
 
     try {
       // Fetch response from the server
-      const response = await axios.get('http://localhost:5000/api/message');
+      const response = await axios.post('http://localhost:5000/api/prompt', {text: newMessages[newMessages.length - 1].text});
       setMessages(prevMessages => [
         ...prevMessages,
         { text: response.data.message, sender: 'LLM' }
       ]);
     } catch (error) {
+      console.log(newMessages[newMessages.length - 1])
       console.error('Error fetching message:', error);
     }
   };
@@ -44,13 +46,15 @@ const GamePage = () => {
     <div className="h-screen flex flex-col bg-[#222831] text-[#EEEEEE]">
       <Logo />
       <SlidingMenu />
+      
+      
 
       {/* Chatbox container */}
-      <div className="flex-grow overflow-y-auto p-4">
+      <div className="flex-grow overflow-y-auto p-4 pt-20"> {/*  pt-20 for top padding */}
         {messages.map((msg, index) => (
           <motion.div
             key={index}
-            className={`mb-4 p-3 max-w-xs ${msg.sender === 'User' ? 'bg-[#76ABAE] self-end' : 'bg-[#31363F] self-start'} rounded-lg shadow-md`}
+            className={`mb-4 p-3 max-w-[90%] ${msg.sender === 'User' ? 'bg-[#76ABAE] self-end ml-auto' : 'bg-[#31363F] self-start mr-auto'} rounded-lg shadow-md`} 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
@@ -78,8 +82,6 @@ const GamePage = () => {
           Send
         </motion.button>
       </div>
-
-      <Footer />
     </div>
   );
 };
