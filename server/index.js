@@ -11,10 +11,12 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
+
 let messages = [
   {
     role: "system",
     content: "You are a helpful assistant.",
+
   },
   {
     role: "user",
@@ -76,6 +78,15 @@ app.post("/api/prompt", async (req, res) => {
 
 
 });
+
+app.get("/api/history", async (req, res) => {
+  try{
+    res.json({history: messages})
+  }catch (err){
+    console.log(err);
+    res.status(200).json(err);
+  }
+})
 
 // The server has started running message
 app.listen(PORT, () => {
