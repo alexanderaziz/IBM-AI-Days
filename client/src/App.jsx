@@ -8,6 +8,7 @@ import axios from 'axios'
 function App() {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState('');
+  const [prompt, setPrompt] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/message')
@@ -15,6 +16,17 @@ function App() {
       .catch(error => console.error('Error fetching message:', error));
   }, []);
 
+  const handleInputChange = (event) => {
+    setPrompt(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await axios.post('http://localhost:5000/api/prompt', {text: prompt})
+    .then(response => setMessage(response.data.message))
+    .catch(err => console.log(err));
+    setPrompt('')
+  };
 
   return (
     <>
@@ -26,6 +38,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
+
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
@@ -38,6 +51,15 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={prompt}
+        onChange={handleInputChange}
+        placeholder="Enter prompt here"
+      />
+      <button type="submit">Submit</button>
+      </form>
       <p>{message}</p>
     </>
   )
