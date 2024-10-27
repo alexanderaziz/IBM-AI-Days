@@ -11,7 +11,7 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-const messages = [
+let messages = [
   {
     role: "system",
     content: "You are a helpful assistant.",
@@ -30,15 +30,6 @@ const messages = [
     content:
       "The distance between Paris, France, and Bangalore, India, is approximately 7,800 kilometers (4,850 miles)",
   },
-  {
-    role: "user",
-    content: [
-      {
-        type: "text",
-        text: "What is the flight distance?",
-      },
-    ],
-  },
 ];
 
 //these are the parameters that need to be passed to the watsonxAIService.generateText() function.
@@ -54,38 +45,9 @@ const watsonxAIService = WatsonXAI.newInstance({
   serviceUrl: "https://us-south.ml.cloud.ibm.com",
 });
 
-// Example of calling the WatsonXAI service to generate text with the specified constant parameters above
-app.get("/api/message", async (req, res) => {
-  try {
-    const watsonResponse = await watsonxAIService.generateText(params);
-    const generatedText = watsonResponse.result.results[0].generated_text;
-    res.json({ message: generatedText });
-  } catch (err) {
-    console.error("Error generating text:", err);
-    res.status(500).json({ error: "Failed to generate text" });
-  }
-});
 
 app.post("/api/prompt", async (req, res) => {
-  const messages = [
-    {
-      role: "system",
-      content: "You are a helpful assistant.",
-    },
-    {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: "How far is Paris from Bangalore?",
-        },
-      ],
-    },
-    {
-      role: "assistant",
-      content:
-        "The distance between Paris, France, and Bangalore, India, is approximately 7,800 kilometers (4,850 miles)",
-    },
+  messages.push(
     {
       role: "user",
       content: [
@@ -94,17 +56,25 @@ app.post("/api/prompt", async (req, res) => {
           text: req.body.text,
         },
       ],
-    },
-  ];
+    });
+
   watsonxAIService
     .textChat({ messages, ...params })
     .then(async ({ result }) => {
       res.json({ message: result.choices?.[0].message.content });
+      messages.push(
+        {
+          role: "assistant",
+          content: result.choices?.[0].message.content,
+        });
     })
     .catch((err) => {
       console.error("Error generating text:", err);
       res.status(500).json({ error: "Failed to generate text" });
+      console.log(messages);
     });
+
+
 });
 
 // The server has started running message

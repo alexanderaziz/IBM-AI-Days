@@ -10,12 +10,6 @@ function App() {
   const [message, setMessage] = useState('');
   const [prompt, setPrompt] = useState('');
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/message')
-      .then(response => setMessage(response.data.message))
-      .catch(error => console.error('Error fetching message:', error));
-  }, []);
-
   const handleInputChange = (event) => {
     setPrompt(event.target.value);
   };
