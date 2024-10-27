@@ -5,18 +5,35 @@ import '../index.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Logo from '../components/Logo';
-import SlidingMenu from '../components/SlidingMenu'; 
+import SlidingMenu from '../components/SlidingMenu';
+import DisclosureSection from '../components/DisclosureSection';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [scrolling, setScrolling] = useState(false);
   const [displayText, setDisplayText] = useState('');
   const [textIndex, setTextIndex] = useState(0);
-  const typingSpeed = 100; // Time in milliseconds to type each character
+  const typingSpeed = 70; // Time in milliseconds to type each character
   const deletingSpeed = 200; // Time in milliseconds to delete each character
-  const pauseTime = 2000; // Pause time after completing a text
-  const texts = ["Innovative Solutions", "Data-Driven Insights", "Proactive Strategies"]; // Texts to type
+  const pauseTime = 20000; // Pause time after completing a text
+  const texts = [
+    "that prepares you for hurricanes.",
+    "that teaches safety through play.",
+    "where your choices matter.",
+    "that transforms learning into adventure.",
+    "designed for real-life hurricane scenarios.",
+    "that turns preparation into a quest."
+  ]; 
   const [isDeleting, setIsDeleting] = useState(false);
+  
+
+  useEffect(() => {
+    const onScroll = () => setScrolling(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll);
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -24,17 +41,6 @@ const LandingPage = () => {
       section.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  const handleScroll = () => {
-    setScrolling(window.scrollY > 50); // Set scrolling true if scrolled down more than 50px
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   useEffect(() => {
     let interval;
@@ -80,73 +86,73 @@ const LandingPage = () => {
 
       <motion.div
         id="homeSection"
-        className="h-screen flex flex-col justify-center items-center bg-[#222831] text-center"
+        className="h-[200vh] flex flex-col justify-center items-center bg-[#222831] text-center"
         initial={{ opacity: 0.5, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 2 }} // Loading animation
       >
-        {/* RPG */}
-        <motion.h1
-          className="text-6xl font-semibold mb-4 text-[#EEEEEE] cursor-pointer"
-          whileHover={{
-            filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
-            transition: { duration: 0.3 },
-            y: -3,
-          }}
-          style={{
-            filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
-          }}
-        >
-          Rainfall Preparation Generative
-        </motion.h1>
-        {/* AI */}
-        <motion.h2
-          className="text-6xl font-extrabold mb-8 text-[#76ABAE] cursor-pointer"
-          whileHover={{
-            filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
-            transition: { duration: 0.3 },
-            y: -3,
-          }}
-          style={{
-            filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
-          }}
-        >
-          Artificial Intelligence
-        </motion.h2>
-
-        {/* Typing Animation Text */}
-        <motion.h3
-          className="text-4xl font-semibold text-[#EEEEEE] mb-6"
-          style={{ minWidth: '300px' }} // Set a minimum width
-        >
-          RPG.AI: {displayText}
-        </motion.h3>
+        <div className="h-screen flex flex-col justify-center items-center">
+          {/* RPG */}  
+          <motion.h1
+            className="text-6xl font-semibold mb-4 text-[#EEEEEE] cursor-pointer"
+            whileHover={{
+              filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
+              transition: { duration: 0.3 },
+              y: -3,
+            }}
+            style={{
+              filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
+            }}
+          >
+            Rainfall Preparation Generative
+          </motion.h1>
 
 
+          {/* AI */}
+          <motion.h2
+            className="text-6xl font-extrabold mb-8 text-[#76ABAE] cursor-pointer"
+            whileHover={{
+              filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
+              transition: { duration: 0.3 },
+              y: -3,
+            }}
+            style={{
+              filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
+            }}
+          >
+            Artificial Intelligence
+          </motion.h2>
 
 
+          {/* Typing Animation Text */}
+          <motion.h3
+            className="text-4xl font-semibold text-[#EEEEEE] mb-6"
+            style={{ minWidth: '300px' }} // Set a minimum width
+          >
+            <span className="text-[#9B7EBD]">The Game </span> {displayText}
+          </motion.h3>
 
-        <motion.button 
-          onClick={() => navigate('/game')}
-          className="bg-[#31363F] text-[#EEEEEE] hover:text-[#76ABAE] transition-colors px-6 py-3 rounded-full font-semibold"
-          whileHover={{ scale: 1.1, rotate: 2 }} // Hover effect
-        >
-          Start Game
-        </motion.button>
-      </motion.div>
+
+          <motion.button 
+            onClick={() => navigate('/game')}
+            className="bg-[#31363F] text-[#EEEEEE] hover:text-[#76ABAE] transition-colors px-6 py-3 rounded-full font-semibold"
+            whileHover={{ scale: 1.1, rotate: 2 }} // Hover effect
+          >
+            Start Game
+          </motion.button>
+        </div>
       
-      {/* Description Section */}
-      <motion.div
-        id="descriptionSection"
-        className="h-screen bg-[#222831] text-[#EEEEEE] py-10 px-6"
-        initial={{ opacity: 0.5, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2 }} // Loading animation
-      >
-        <h2 className="text-4xl font-bold text-center mb-4">About the App</h2>
-        <p className="text-lg text-center max-w-2xl mx-auto">
-          Rainfall Preparation Generative leverages cutting-edge artificial intelligence to provide innovative solutions for managing rainfall patterns and preparation strategies. With our app, users can easily access valuable insights and make informed decisions to ensure readiness for any rainfall scenario.
-        </p>
+        
+        {/* Fixed-width disclosure section centered in the bottom half */}
+        <motion.div
+          className="h-screen w-full flex items-center justify-center items-end pb-40"
+          initial={{ opacity: 0.1 }}
+          animate={{ opacity: scrolling ? 1 : 0.1 }}
+          transition={{ duration: 1 }}
+        >
+          <DisclosureSection />
+        </motion.div>
+
       </motion.div>
       
 
