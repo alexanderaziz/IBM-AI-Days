@@ -1,13 +1,22 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion'; // Import motion from framer-motion
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion'; 
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Logo from '../components/Logo';
+import SlidingMenu from '../components/SlidingMenu'; 
 
 const LandingPage = () => {
-
   const navigate = useNavigate();
+  const [scrolling, setScrolling] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [textIndex, setTextIndex] = useState(0);
+  const typingSpeed = 100; // Time in milliseconds to type each character
+  const deletingSpeed = 200; // Time in milliseconds to delete each character
+  const pauseTime = 2000; // Pause time after completing a text
+  const texts = ["Innovative Solutions", "Data-Driven Insights", "Proactive Strategies"]; // Texts to type
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -16,53 +25,130 @@ const LandingPage = () => {
     }
   };
 
+  const handleScroll = () => {
+    setScrolling(window.scrollY > 50); // Set scrolling true if scrolled down more than 50px
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    let interval;
+
+    const type = () => {
+      const currentText = texts[textIndex];
+
+      if (isDeleting) {
+        // Delete one character
+        setDisplayText((prev) => prev.slice(0, prev.length - 1));
+        if (displayText.length === 0) {
+          // Switch to the next text after a pause
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % texts.length);
+          interval = setTimeout(type, pauseTime); // Pause before typing the next text
+        } else {
+          interval = setTimeout(type, deletingSpeed);
+        }
+      } else {
+        // Type one character
+        setDisplayText((prev) => currentText.slice(0, prev.length + 1));
+        if (displayText.length === currentText.length) {
+          // Switch to deleting mode after a pause
+          setIsDeleting(true);
+          interval = setTimeout(type, pauseTime); // Pause after typing
+        } else {
+          interval = setTimeout(type, typingSpeed);
+        }
+      }
+    };
+
+    interval = setTimeout(type, typingSpeed); // Start the typing process
+
+    // Cleanup function to clear the timer
+    return () => clearTimeout(interval);
+  }, [displayText, isDeleting, textIndex, texts]);
+
+
   return (
     <> 
-      <Header />
+      <Logo />
+      <SlidingMenu />
+
       <motion.div
-	  	id="homeSection"
-        className="h-screen flex flex-col justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700 text-white text-center"
-        initial={{ opacity: 0, y: -50 }}
+        id="homeSection"
+        className="h-screen flex flex-col justify-center items-center bg-[#222831] text-center"
+        initial={{ opacity: 0.5, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }} // some random loading animation
+        transition={{ duration: 2 }} // Loading animation
       >
+        {/* RPG */}
         <motion.h1
-          className="text-5xl font-extrabold mb-4 cursor-pointer hover:translate-y-1 hover:text-blue-300 transition-all duration-300" // Added hover effect
-          whileHover={{ scale: 1.05 }} // hover scale
+          className="text-6xl font-semibold mb-4 text-[#EEEEEE] cursor-pointer"
+          whileHover={{
+            filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
+            transition: { duration: 0.3 },
+            y: -3,
+          }}
+          style={{
+            filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
+          }}
         >
-          Welcome to RPG game!
+          Rainfall Preparation Generative
         </motion.h1>
-        <p className="text-lg mb-8">A game where u are in a hurricane and u try not to die.</p>
+        {/* AI */}
+        <motion.h2
+          className="text-6xl font-extrabold mb-8 text-[#76ABAE] cursor-pointer"
+          whileHover={{
+            filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
+            transition: { duration: 0.3 },
+            y: -3,
+          }}
+          style={{
+            filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
+          }}
+        >
+          Artificial Intelligence
+        </motion.h2>
+
+        {/* Typing Animation Text */}
+        <motion.h3
+          className="text-4xl font-semibold text-[#EEEEEE] mb-6"
+          style={{ minWidth: '300px' }} // Set a minimum width
+        >
+          RPG.AI: {displayText}
+        </motion.h3>
+
+
+
+
+
         <motion.button 
           onClick={() => navigate('/game')}
-          className="bg-white text-blue-500 hover:bg-gray-200 transition-colors px-6 py-3 rounded-full font-semibold"
-          whileHover={{ scale: 1.1, rotate: 3 }} // hover effect
+          className="bg-[#31363F] text-[#EEEEEE] hover:text-[#76ABAE] transition-colors px-6 py-3 rounded-full font-semibold"
+          whileHover={{ scale: 1.1, rotate: 2 }} // Hover effect
         >
           Start Game
         </motion.button>
-
       </motion.div>
-
-      {/* Additional Content Section */}
+      
+      {/* Description Section */}
       <motion.div
-        id="aboutSection"
-        className="min-h-screen flex flex-col justify-center items-center bg-gray-200 py-16"
-        initial={{ opacity: 0, y: 50 }}
+        id="descriptionSection"
+        className="h-screen bg-[#222831] text-[#EEEEEE] py-10 px-6"
+        initial={{ opacity: 0.5, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }} // loading animation
+        transition={{ duration: 2 }} // Loading animation
       >
-        <h2 className="text-3xl font-bold mb-4">About RPG game</h2>
-        <p className="text-center max-w-2xl text-lg text-gray-700 mb-4">
-          Some stuff about the game here blah blah blah  blah blah blah  blah blah blah  blah blah blah  blah blah blah 
+        <h2 className="text-4xl font-bold text-center mb-4">About the App</h2>
+        <p className="text-lg text-center max-w-2xl mx-auto">
+          Rainfall Preparation Generative leverages cutting-edge artificial intelligence to provide innovative solutions for managing rainfall patterns and preparation strategies. With our app, users can easily access valuable insights and make informed decisions to ensure readiness for any rainfall scenario.
         </p>
-        <motion.button 
-          onClick={() => scrollToSection('homeSection')}
-          className="bg-blue-600 text-white hover:bg-blue-700 transition-colors px-6 py-3 rounded-full font-semibold"
-          whileHover={{ scale: 1.1 }} // Scale on hover
-        >
-          Play now!
-        </motion.button>
       </motion.div>
+      
 
       <Footer />
     </>
