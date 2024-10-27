@@ -13,12 +13,6 @@ const GamePage = () => {
 
   // first message from the server when the page loads
   useEffect(() => {
-    // This should probably get deleted. The call to the AI is post api/prompt 
-    axios.get('http://localhost:5000/api/message')
-      .then(response => {
-        setMessages([{ text: response.data.message, sender: 'LLM' }]);
-      })
-      .catch(error => console.error('Error fetching message:', error));
     axios.get('http://localhost:5000/api/history')
     .then(response => {
       console.log(response.data.history);
@@ -37,12 +31,13 @@ const GamePage = () => {
 
     try {
       // Fetch response from the server
-      const response = await axios.get('http://localhost:5000/api/message');
+      const response = await axios.post('http://localhost:5000/api/prompt', {text: newMessages[newMessages.length - 1].text});
       setMessages(prevMessages => [
         ...prevMessages,
         { text: response.data.message, sender: 'LLM' }
       ]);
     } catch (error) {
+      console.log(newMessages[newMessages.length - 1])
       console.error('Error fetching message:', error);
     }
   };
@@ -57,7 +52,7 @@ const GamePage = () => {
         {messages.map((msg, index) => (
           <motion.div
             key={index}
-            className={`mb-4 p-3 max-w-xs ${msg.sender === 'User' ? 'bg-blue-500 self-end' : 'bg-gray-700 self-start'} rounded-lg`}
+            className={`mb-4 p-3 max-w-l ${msg.sender === 'User' ? 'bg-blue-500 self-end' : 'bg-gray-700 self-start'} rounded-lg`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
