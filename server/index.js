@@ -12,14 +12,6 @@ app.use(cors());
 app.use(express.json());
 
 
-//these are the parameters that need to be passed to the watsonxAIService.generateText() function. 
-const params = {
-  input: 'Are hurricanes dangerous?',
-  modelId: 'ibm/granite-13b-chat-v2',
-  projectId: '0babe918-b3ea-44b1-8c68-ac854b4f160e',
-  parameters: {
-    max_new_tokens: 100,
-
 let messages = [
   {
     role: "system",
@@ -86,6 +78,15 @@ app.post("/api/prompt", async (req, res) => {
 
 
 });
+
+app.get("/api/history", async (req, res) => {
+  try{
+    res.json({history: messages})
+  }catch (err){
+    console.log(err);
+    res.status(200).json(err);
+  }
+})
 
 // The server has started running message
 app.listen(PORT, () => {
