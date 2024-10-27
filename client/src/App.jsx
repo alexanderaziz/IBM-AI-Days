@@ -24,13 +24,14 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/game" element={<GamePage />} />
         </Routes>
       </div>
     </Router>
-    
   );
+
 }
 
 export default App

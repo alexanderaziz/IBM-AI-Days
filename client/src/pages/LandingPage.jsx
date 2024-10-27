@@ -1,12 +1,39 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion'; // Import motion from framer-motion
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion'; 
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Logo from '../components/Logo';
+import SlidingMenu from '../components/SlidingMenu';
+import DisclosureSection from '../components/DisclosureSection';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [scrolling, setScrolling] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [textIndex, setTextIndex] = useState(0);
+  const typingSpeed = 70; // Time in milliseconds to type each character
+  const deletingSpeed = 200; // Time in milliseconds to delete each character
+  const pauseTime = 20000; // Pause time after completing a text
+  const texts = [
+    "that prepares you for hurricanes.",
+    "that teaches safety through play.",
+    "where your choices matter.",
+    "that transforms learning into adventure.",
+    "designed for real-life hurricane scenarios.",
+    "that turns preparation into a quest."
+  ]; 
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+
+  useEffect(() => {
+    const onScroll = () => setScrolling(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll);
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -15,53 +42,119 @@ const LandingPage = () => {
     }
   };
 
+  useEffect(() => {
+    let interval;
+
+    const type = () => {
+      const currentText = texts[textIndex];
+
+      if (isDeleting) {
+        // Delete one character
+        setDisplayText((prev) => prev.slice(0, prev.length - 1));
+        if (displayText.length === 0) {
+          // Switch to the next text after a pause
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % texts.length);
+          interval = setTimeout(type, pauseTime); // Pause before typing the next text
+        } else {
+          interval = setTimeout(type, deletingSpeed);
+        }
+      } else {
+        // Type one character
+        setDisplayText((prev) => currentText.slice(0, prev.length + 1));
+        if (displayText.length === currentText.length) {
+          // Switch to deleting mode after a pause
+          setIsDeleting(true);
+          interval = setTimeout(type, pauseTime); // Pause after typing
+        } else {
+          interval = setTimeout(type, typingSpeed);
+        }
+      }
+    };
+
+    interval = setTimeout(type, typingSpeed); // Start the typing process
+
+    // Cleanup function to clear the timer
+    return () => clearTimeout(interval);
+  }, [displayText, isDeleting, textIndex, texts]);
+
+
   return (
     <> 
-      <Header />
+      <Logo />
+      <SlidingMenu />
+
       <motion.div
-	  	id="homeSection"
-        className="h-screen flex flex-col justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700 text-white text-center"
-        initial={{ opacity: 0, y: -50 }}
+        id="homeSection"
+        className="h-[200vh] flex flex-col justify-center items-center bg-[#222831] text-center"
+        initial={{ opacity: 0.5, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }} // some random loading animation
+        transition={{ duration: 2 }} // Loading animation
       >
-        <motion.h1
-          className="text-5xl font-extrabold mb-4 cursor-pointer hover:translate-y-1 hover:text-blue-300 transition-all duration-300" // Added hover effect
-          whileHover={{ scale: 1.05 }} // hover scale
+        <div className="h-screen flex flex-col justify-center items-center">
+          {/* RPG */}  
+          <motion.h1
+            className="text-6xl font-semibold mb-4 text-[#EEEEEE] cursor-pointer"
+            whileHover={{
+              filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
+              transition: { duration: 0.3 },
+              y: -3,
+            }}
+            style={{
+              filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
+            }}
+          >
+            Rainfall Preparation Generative
+          </motion.h1>
+
+
+          {/* AI */}
+          <motion.h2
+            className="text-6xl font-extrabold mb-8 text-[#76ABAE] cursor-pointer"
+            whileHover={{
+              filter: 'drop-shadow(0 0 10px #76ABAE)', // Glow effect
+              transition: { duration: 0.3 },
+              y: -3,
+            }}
+            style={{
+              filter: 'drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))', // drop shadow
+            }}
+          >
+            Artificial Intelligence
+          </motion.h2>
+
+
+          {/* Typing Animation Text */}
+          <motion.h3
+            className="text-4xl font-semibold text-[#EEEEEE] mb-6"
+            style={{ minWidth: '300px' }} // Set a minimum width
+          >
+            <span className="text-[#9B7EBD]">The Game </span> {displayText}
+          </motion.h3>
+
+
+          <motion.button 
+            onClick={() => navigate('/game')}
+            className="bg-[#31363F] text-[#EEEEEE] hover:text-[#76ABAE] transition-colors px-6 py-3 rounded-full font-semibold"
+            whileHover={{ scale: 1.1, rotate: 2 }} // Hover effect
+          >
+            Start Game
+          </motion.button>
+        </div>
+      
+        
+        {/* Fixed-width disclosure section centered in the bottom half */}
+        <motion.div
+          className="h-screen w-full flex items-center justify-center items-end pb-40"
+          initial={{ opacity: 0.1 }}
+          animate={{ opacity: scrolling ? 1 : 0.1 }}
+          transition={{ duration: 1 }}
         >
-          Welcome to RPG game!
-        </motion.h1>
-        <p className="text-lg mb-8">A game where u are in a hurricane and u try not to die.</p>
-        <motion.button 
-          onClick={() => navigate('/game')}
-          className="bg-white text-blue-500 hover:bg-gray-200 transition-colors px-6 py-3 rounded-full font-semibold"
-          whileHover={{ scale: 1.1, rotate: 3 }} // hover effect
-        >
-          Start Game
-        </motion.button>
+          <DisclosureSection />
+        </motion.div>
 
       </motion.div>
-
-      {/* Additional Content Section */}
-      <motion.div
-        id="aboutSection"
-        className="min-h-screen flex flex-col justify-center items-center bg-gray-200 py-16"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }} // loading animation
-      >
-        <h2 className="text-3xl font-bold mb-4">About RPG game</h2>
-        <p className="text-center max-w-2xl text-lg text-gray-700 mb-4">
-          Some stuff about the game here blah blah blah  blah blah blah  blah blah blah  blah blah blah  blah blah blah 
-        </p>
-        <motion.button 
-          onClick={() => scrollToSection('homeSection')}
-          className="bg-blue-600 text-white hover:bg-blue-700 transition-colors px-6 py-3 rounded-full font-semibold"
-          whileHover={{ scale: 1.1 }} // Scale on hover
-        >
-          Play now!
-        </motion.button>
-      </motion.div>
+      
 
       <Footer />
     </>
