@@ -18,7 +18,7 @@ const AboutPage = () => {
                             Welcome to RPG.AI! This game is designed to provide players with an immersive experience in managing rainfall scenarios, leveraging cutting-edge artificial intelligence to create innovative solutions for preparedness and strategic gameplay. Dive into the world of simulated hurricanes and storms, where your decisions shape the outcome of each challenge. Enjoy the adventure!
                         </p>
                     </section>
-                </main>
+                </main> 
                 <Footer />
             </div>
         </>
