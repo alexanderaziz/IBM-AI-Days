@@ -44,6 +44,7 @@ const GamePage = () => {
     axios
       .get('http://localhost:5000/api/history')
       .then((response) => {
+        console.log(response.data.history);
         const reconstructedMessages = response.data.history.slice(1).map((entry) => ({
           text: Array.isArray(entry.content)
             ? entry.content.map((item) => item.text).join(' ')
@@ -94,21 +95,23 @@ const GamePage = () => {
       <SlidingMenu />
 
       <div className="flex-grow overflow-y-auto p-4 pt-20 ml-36 mr-36">
-        {messages.map((msg, index) => (
-          <motion.div
-            key={index}
-            className={`mb-4 p-3 max-w-[90%] ${
-              msg.sender === 'User'
-                ? 'bg-[#76ABAE] self-end ml-auto'
-                : 'bg-[#31363F] self-start mr-auto'
-            } rounded-lg shadow-md`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {msg.text}
-          </motion.div>
-        ))}
+      {messages.map((msg, index) => (
+  <motion.div
+    key={index}
+    className={`mb-4 p-3 max-w-[90%] ${
+      msg.sender === 'User'
+        ? 'bg-[#76ABAE] self-end ml-auto'
+        : 'bg-[#31363F] self-start mr-auto'
+    } rounded-lg shadow-md`}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.2 }}
+    style={{ whiteSpace: 'pre-wrap' }} // Add this line
+  >
+    {msg.text}
+  </motion.div>
+))}
+
 
         {loading && (
           <div className="self-start mr-auto mb-4 p-3 bg-[#31363F] rounded-lg shadow-md">
