@@ -26,21 +26,26 @@ This project is a text-based RPG game built with IBM’s AI cloud services. It a
 Want to run the game locally? Follow these steps:  
 
 1. **Create an IBM Cloud account** and configure the AI services used for text generation.  
-2. **Add your API keys** in the `.env` file following the provided template.  
-3. **Clone the repository:**
-4. Start the client
+2. **Add your API keys** in the `.env` file following the provided template.
+     It should look like this:
+      ```
+      WATSONX_AI_AUTH_TYPE=iam
+      WATSONX_AI_APIKEY='<YOUR_KEY_HERE>'
+      ```
+4. **Clone the repository:**
+5. Start the client
    ```
    cd client
    npm run dev
    cd ..
    ```
-5. Start the server
+6. Start the server
    ```
    cd server
    npm start
    ```
-6.  open your browser and go to: http://localhost:5173
-7. Enjoy the game and start making safe decisions to handle heavy rainfall scenarios!
+7.  open your browser and go to: http://localhost:5173
+8. Enjoy the game and start making safe decisions to handle heavy rainfall scenarios!
 
 ## 🙌 Acknowledgments
 Special thanks to IBM Cloud for providing access and support throughout the project. Thanks for making this Hackathon possible!
