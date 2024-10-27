@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import '../index.css';
 import Logo from '../components/Logo';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 import SlidingMenu from '../components/SlidingMenu';
 
 const GamePage = () => {
@@ -22,6 +23,8 @@ const GamePage = () => {
   // Fetch chat history on component mount
   useEffect(() => {
     fetchChatHistory();
+      }, []);
+
   // Fetch the first message from the server when the page loads
   useEffect(() => {
     axios.get('http://localhost:5000/api/history')
@@ -80,9 +83,8 @@ const GamePage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-800 text-white">
-      <Header />
     <div className="h-screen flex flex-col bg-[#222831] text-[#EEEEEE]">
+      <Header />
       <Logo />
       <SlidingMenu />
       
