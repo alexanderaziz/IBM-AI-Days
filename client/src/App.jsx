@@ -1,12 +1,15 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import axios from 'axios'
 
+import LandingPage from './pages/LandingPage';
+import AboutPage from './pages/AboutPage';
+import GamePage from './pages/GamePage';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
-  const [count, setCount] = useState(0)
   const [message, setMessage] = useState('');
   const [prompt, setPrompt] = useState('');
 
@@ -23,15 +26,19 @@ function App() {
   };
 
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/game" element={<GamePage />} />
+        </Routes>
       </div>
+
+    </Router>
+    
+  );
+
 
       <h1>Vite + React</h1>
       <div className="card">
@@ -57,6 +64,8 @@ function App() {
       <p>{message}</p>
     </>
   )
+
 }
 
 export default App
+
